@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+    <!-- Подключение Bootstrap для стилизации -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Подключение jQuery для работы с JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Пример Flask-сайта</h2>
+
+        <!-- Кнопка 1: Выполнить действие -->
+        <button id="action-btn" class="btn btn-primary mb-2">Выполнить действие</button>
+        <!-- Место для вывода результата нажатия на кнопку 1 -->
+        <p id="action-result"></p>
+
+        <!-- Кнопка 2: Посчитать квадрат числа -->
+        <div class="mb-2">
+            <!-- Поле для ввода числа -->
+            <input type="number" id="number-input" placeholder="Введите число" class="mb-2">
+            <!-- Кнопка для запуска расчета -->
+            <button id="square-btn" class="btn btn-secondary">Посчитать квадрат</button>
+        </div>
+        <!-- Место для вывода результата нажатия на кнопку 2 -->
+        <p id="square-result"></p>
+    </div>
+
+    <script>
+        // JavaScript-код для обработки событий
+        $(document).ready(function(){
+			// Когда документ загружен и готов
+			$("#action-btn").click(function(){
+				// При нажатии на кнопку "Выполнить действие"
+				$.post("/perform_action", function(data){
+					// Отправка POST-запроса на маршрут /perform_action
+					// После получения ответа от сервера
+					$("#action-result").text(data.result); // Вывод результата
+					setTimeout(function() {
+						// Установка таймера на 3 секунды
+						$("#action-result").text(''); // Очистка текста после таймера
+					}, 3000);
+				});
+			});
+
+			$("#square-btn").click(function(){
+				// При нажатии на кнопку "Посчитать квадрат"
+				var number = $("#number-input").val(); // Получение числа из поля ввода
+				$.post("/square", {number: number}, function(data){
+					// Отправка числа на сервер и получение квадрата числа
+					$("#square-result").text(data.result); // Вывод результата
+				});
+			});
+		});
+    </script>
+</body>
+</html>
